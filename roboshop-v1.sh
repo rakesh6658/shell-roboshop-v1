@@ -7,7 +7,7 @@ Hosted_zone_id="Z01170992B3XLBKODT7HI"
 
 for instance in $@
 do
-instance_id=$(aws ec2 run-instances \
+instance_id= $(aws ec2 run-instances \
     --image-id "${image_id}" \
     --instance-type "${instance_type}" \
     --security-groups roboshop-common "roboshop-${instance}" \
@@ -19,13 +19,13 @@ instance_id=$(aws ec2 run-instances \
 echo "instance_id=$instance_id"
 
 if [ $instance != "frontend" ]; then
-  IP=$(aws ec2 describe-instances \
+  IP= $(aws ec2 describe-instances \
     --instance-ids "${instance_id}" \
     --query 'Reservations[*].Instances[*].PrivateIpAddress' \
     --output text
 )
 else
-IP=$(aws ec2 describe-instances \
+IP= $(aws ec2 describe-instances \
     --instance-ids "${instance_id}" \
     --query 'Reservations[*].Instances[*].PublicIpAddress' \
     --output text)
