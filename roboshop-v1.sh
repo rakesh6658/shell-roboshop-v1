@@ -11,11 +11,14 @@ instance_id=$(aws ec2 run-instances \
     --image-id "${image_id}" \
     --instance-type "${instance_type}" \
     --security-groups roboshop-common roboshop-mongodb \
-    --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=roboshop-"${instance}"}]')
+    --query 'Instances[0].InstanceId' \
+    --output text \
+    --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-${instance}}]"
+    )
 
 echo "instance_id=$instance_id"
 
-if [ $instance -ne "frontend" ]; then
+if [ $instance != "frontend" ]; then
   IP=$(aws ec2 describe-instances \
     --instance-ids "${instance_id}" \
     --query 'Reservations[*].Instances[*].PrivateIpAddress' \
